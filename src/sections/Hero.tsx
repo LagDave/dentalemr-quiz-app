@@ -27,7 +27,11 @@ export default function Hero({
           label="Get started"
           style="accent"
         />
-        <Button label="Learn more" style="primary" />
+        <Button
+          href="https://dentalemr.com/faq"
+          label="Learn more"
+          style="primary"
+        />
       </div>
     </section>
   );
