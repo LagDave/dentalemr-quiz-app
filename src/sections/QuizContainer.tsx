@@ -7,6 +7,8 @@ import axios from "axios";
 import ConfettiExplosion from "react-confetti-explosion";
 import Lottie from "lottie-react";
 import successLottie from "../assets/success-lottie.json";
+import { toast } from "react-toastify";
+import ReCAPTCHA from "react-google-recaptcha";
 
 type QuizContainerProps = {
   onProgressChange: (percentage: number) => void;
@@ -75,8 +77,15 @@ export default function QuizContainer({
     return false;
   }
 
+  const handleCaptchaChange = (token: string | null) => {
+    setCaptchaToken(token);
+  };
+
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
+
   async function submitResults() {
-    if (!validateEmail()) return;
+    if (!captchaToken) return toast.warn("Please complete captcha first.");
+    if (!validateEmail()) return toast.warn("Please enter a valid email.");
 
     setIsLoading(true);
 
@@ -147,6 +156,10 @@ export default function QuizContainer({
           isBlurred={currentItem < questions.length}
         />
       </div>
+      <ReCAPTCHA
+        sitekey="6LeDy5gqAAAAAMFkGHvNyv18t13j7Chgv2vZcdW-"
+        onChange={handleCaptchaChange}
+      />
       <Button
         onClick={submitResults}
         style="accent"
